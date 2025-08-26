@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { store, RootState } from './store';
+import { Provider, useSelector } from 'react-redux';
+import { store } from './store';
 import './i18n';
 
 import Layout from './components/Layout/Layout';
@@ -13,8 +12,11 @@ import StoriesPage from './components/Stories/StoriesPage';
 import ConsultationsPage from './components/Consultations/ConsultationsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
-const AppContent: React.FC = () => {
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+const AppContent = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  // If using TypeScript, add the RootState type:
+  // import { RootState } from './store';
+  // const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return (
     <Router>

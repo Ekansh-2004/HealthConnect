@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Heart, Mail, Lock, User } from 'lucide-react';
 import { loginSuccess } from '../../store/slices/authSlice';
 
-const LoginForm: React.FC = () => {
+const LoginForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -13,10 +13,10 @@ const LoginForm: React.FC = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    role: 'adult' as 'adolescent' | 'adult' | 'healthcare_professional'
+    role: 'adult'
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
     // Mock authentication - replace with actual API call
@@ -99,7 +99,7 @@ const LoginForm: React.FC = () => {
                   name="role"
                   className="appearance-none rounded-md relative block w-full pl-10 px-3 py-2 border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                   value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value as any })}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                 >
                   <option value="adolescent">{t('auth.adolescent')}</option>
                   <option value="adult">{t('auth.adult')}</option>

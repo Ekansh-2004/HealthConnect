@@ -1,13 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import { RootState } from '../../store';
 import AdolescentDashboard from './AdolescentDashboard';
 import AdultDashboard from './AdultDashboard';
 import HealthcareDashboard from './HealthcareDashboard';
 
-const Dashboard: React.FC = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
+const Dashboard = () => {
+  const { user } = useSelector((state) => state.auth);
 
   if (!user) return null;
 

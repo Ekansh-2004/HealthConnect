@@ -3,12 +3,11 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { Heart, Menu, Globe, LogOut, User } from 'lucide-react';
-import { RootState } from '../../store';
 import { logout } from '../../store/slices/authSlice';
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   const { t, i18n } = useTranslation();
-  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,7 +20,7 @@ const Navbar: React.FC = () => {
     navigate('/login');
   };
 
-  const changeLanguage = (lng: string) => {
+  const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
     setIsLangMenuOpen(false);
   };

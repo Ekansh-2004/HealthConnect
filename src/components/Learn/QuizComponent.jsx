@@ -1,24 +1,15 @@
 import React, { useState } from 'react';
 import { Check, X, RotateCcw, Award } from 'lucide-react';
 
-interface Question {
-  id: string;
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  explanation: string;
-  category: string;
-}
-
-const QuizComponent: React.FC = () => {
+const QuizComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
-  const [answers, setAnswers] = useState<number[]>([]);
+  const [answers, setAnswers] = useState([]);
   const [quizCompleted, setQuizCompleted] = useState(false);
 
-  const questions: Question[] = [
+  const questions = [
     {
       id: '1',
       question: 'What is the most effective way to prevent sexually transmitted infections (STIs)?',
@@ -86,7 +77,7 @@ const QuizComponent: React.FC = () => {
     }
   ];
 
-  const handleAnswerSelect = (answerIndex: number) => {
+  const handleAnswerSelect = (answerIndex) => {
     setSelectedAnswer(answerIndex);
   };
 

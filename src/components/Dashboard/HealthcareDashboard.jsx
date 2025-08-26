@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import { Users, MessageSquare, BookOpen, TrendingUp, Calendar, AlertTriangle } from 'lucide-react';
 
-const HealthcareDashboard: React.FC = () => {
+const HealthcareDashboard = () => {
   const { t } = useTranslation();
 
   // Mock data for analytics

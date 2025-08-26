@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { BookOpen, MessageCircle, Award, Volume2 } from 'lucide-react';
 
-const AdolescentDashboard: React.FC = () => {
+const AdolescentDashboard = () => {
   const { t } = useTranslation();
 
   return (

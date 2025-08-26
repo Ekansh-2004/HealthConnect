@@ -1,19 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-export interface ChatMessage {
-  id: string;
-  message: string;
-  sender: 'user' | 'bot';
-  timestamp: string;
-}
-
-interface ChatState {
-  messages: ChatMessage[];
-  isOpen: boolean;
-  loading: boolean;
-}
-
-const initialState: ChatState = {
+const initialState = {
   messages: [],
   isOpen: false,
   loading: false,
@@ -26,10 +13,10 @@ const chatSlice = createSlice({
     toggleChat: (state) => {
       state.isOpen = !state.isOpen;
     },
-    addMessage: (state, action: PayloadAction<ChatMessage>) => {
+    addMessage: (state, action) => {
       state.messages.push(action.payload);
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
+    setLoading: (state, action) => {
       state.loading = action.payload;
     },
     clearMessages: (state) => {

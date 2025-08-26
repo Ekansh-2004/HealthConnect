@@ -1,20 +1,12 @@
 import React, { useState } from 'react';
 import { RotateCcw, Check, X } from 'lucide-react';
 
-interface MythFact {
-  id: string;
-  statement: string;
-  isFact: boolean;
-  explanation: string;
-  category: string;
-}
-
-const MythFactCards: React.FC = () => {
-  const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
-  const [answeredCards, setAnsweredCards] = useState<Set<string>>(new Set());
+const MythFactCards = () => {
+  const [flippedCards, setFlippedCards] = useState(new Set());
+  const [answeredCards, setAnsweredCards] = useState(new Set());
   const [correctAnswers, setCorrectAnswers] = useState(0);
 
-  const mythsFacts: MythFact[] = [
+  const mythsFacts = [
     {
       id: '1',
       statement: 'You can get pregnant from your first time having sex',
@@ -59,7 +51,7 @@ const MythFactCards: React.FC = () => {
     }
   ];
 
-  const handleGuess = (cardId: string, guess: boolean) => {
+  const handleGuess = (cardId, guess) => {
     const card = mythsFacts.find(mf => mf.id === cardId);
     if (!card) return;
 

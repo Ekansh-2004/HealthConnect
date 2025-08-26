@@ -2,16 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { MessageCircle, Send, X, Minimize2, Calendar } from 'lucide-react';
-import { RootState } from '../../store';
 import { toggleChat, addMessage, setLoading } from '../../store/slices/chatSlice';
 
-const ChatWidget: React.FC = () => {
+const ChatWidget = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { messages, isOpen, loading } = useSelector((state: RootState) => state.chat);
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { messages, isOpen, loading } = useSelector((state) => state.chat);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [inputMessage, setInputMessage] = useState('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     scrollToBottom();
@@ -21,7 +20,7 @@ const ChatWidget: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const simulateAIResponse = (userMessage: string): string => {
+  const simulateAIResponse = (userMessage) => {
     const responses = {
       pregnancy: [
         "Pregnancy concerns are completely normal. If you think you might be pregnant, the most reliable way to know is through a pregnancy test. These are available at pharmacies and are most accurate when taken after a missed period.",
@@ -68,7 +67,7 @@ const ChatWidget: React.FC = () => {
     const userMessage = {
       id: Date.now().toString(),
       message: inputMessage,
-      sender: 'user' as const,
+      sender: 'user',
       timestamp: new Date().toISOString()
     };
     dispatch(addMessage(userMessage));
@@ -83,7 +82,7 @@ const ChatWidget: React.FC = () => {
       const aiResponse = {
         id: (Date.now() + 1).toString(),
         message: simulateAIResponse(userInput),
-        sender: 'bot' as const,
+        sender: 'bot',
         timestamp: new Date().toISOString()
       };
       dispatch(addMessage(aiResponse));
@@ -91,7 +90,7 @@ const ChatWidget: React.FC = () => {
     }, 1500);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();

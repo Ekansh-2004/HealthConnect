@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { Heart, MessageSquare, Share2, Plus, Clock, CheckCircle } from 'lucide-react';
-import { RootState } from '../../store';
 import { addStory } from '../../store/slices/contentSlice';
 
-const StoriesPage: React.FC = () => {
+const StoriesPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { stories } = useSelector((state: RootState) => state.content);
+  const { stories } = useSelector((state) => state.content);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSubmissionForm, setShowSubmissionForm] = useState(false);
@@ -20,9 +19,7 @@ const StoriesPage: React.FC = () => {
   const mockStories = [
     {
       id: '1',
-      content: `I was 16 when I first learned about proper contraception. Growing up, no one talked about these things openly. I wish I had access to accurate information earlier. Now I'm sharing my story to help others understand the importance of education and open communication about sexual health.
-
-The journey wasn't easy, but I learned that asking questions is important, and there are always people willing to help when you need guidance.`,
+      content: `I was 16 when I first learned about proper contraception...`,
       approved: true,
       createdAt: '2024-01-15',
       category: 'Education',
@@ -30,9 +27,7 @@ The journey wasn't easy, but I learned that asking questions is important, and t
     },
     {
       id: '2',
-      content: `As a college student, I discovered that many of my friends had misconceptions about STI prevention. We started a small group where we could discuss these topics openly and share reliable information. It's amazing how much we learned from each other.
-
-Creating a safe space for these conversations made such a difference in our understanding and confidence in making informed decisions.`,
+      content: `As a college student, I discovered that many of my friends...`,
       approved: true,
       createdAt: '2024-01-10',
       category: 'Community',
@@ -40,9 +35,7 @@ Creating a safe space for these conversations made such a difference in our unde
     },
     {
       id: '3',
-      content: `I want to share my experience visiting a healthcare provider for the first time to discuss sexual health. I was nervous, but the doctor was understanding and provided clear information without judgment. They answered all my questions and helped me understand my options.
-
-If you're nervous about having these conversations with healthcare providers, remember that they're there to help, not to judge.`,
+      content: `I want to share my experience visiting a healthcare provider...`,
       approved: true,
       createdAt: '2024-01-08',
       category: 'Healthcare',

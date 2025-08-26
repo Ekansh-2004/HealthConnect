@@ -2,23 +2,13 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Calendar, Clock, Video, User, Plus, CheckCircle, Phone } from 'lucide-react';
 
-interface Appointment {
-  id: string;
-  doctorName: string;
-  specialty: string;
-  date: string;
-  time: string;
-  type: 'video' | 'phone';
-  status: 'upcoming' | 'completed' | 'cancelled';
-}
-
-const ConsultationsPage: React.FC = () => {
+const ConsultationsPage = () => {
   const { t } = useTranslation();
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDoctor, setSelectedDoctor] = useState('');
-  const [consultationType, setConsultationType] = useState<'video' | 'phone'>('video');
+  const [consultationType, setConsultationType] = useState('video');
   const [reason, setReason] = useState('');
 
   const doctors = [
@@ -48,7 +38,7 @@ const ConsultationsPage: React.FC = () => {
     }
   ];
 
-  const appointments: Appointment[] = [
+  const appointments = [
     {
       id: '1',
       doctorName: 'Dr. Sarah Johnson',

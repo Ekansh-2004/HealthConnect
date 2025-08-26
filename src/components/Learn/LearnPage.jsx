@@ -4,10 +4,10 @@ import { BookOpen, Award, Volume2, Eye, RotateCcw } from 'lucide-react';
 import QuizComponent from './QuizComponent';
 import MythFactCards from './MythFactCards';
 
-const LearnPage: React.FC = () => {
+const LearnPage = () => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<'articles' | 'myths' | 'quiz'>('articles');
-  const [speakingText, setSpeakingText] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('articles');
+  const [speakingText, setSpeakingText] = useState(null);
 
   const articles = [
     {
@@ -53,7 +53,7 @@ Communication is key in any relationship. Partners should feel comfortable discu
     }
   ];
 
-  const speakText = (text: string) => {
+  const speakText = (text) => {
     if ('speechSynthesis' in window) {
       // Cancel any ongoing speech
       window.speechSynthesis.cancel();
