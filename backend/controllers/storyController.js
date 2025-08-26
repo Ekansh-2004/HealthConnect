@@ -2,18 +2,13 @@ import Story from "../models/Story.js";
 // Create Story
 export const createStory = async (req, res) => {
 	try {
-		const { title, content, category, tags, isAnonymous } = req.body;
+		const { title, content, category } = req.body;
 
 		const story = await Story.create({
 			author: req.user.id,
 			title,
 			content,
 			category,
-			tags: tags || [],
-			isAnonymous: isAnonymous || false,
-			isApproved: req.user.userType === "health_prof",
-			approvedBy: req.user.userType === "health_prof" ? req.user.id : undefined,
-			approvedAt: req.user.userType === "health_prof" ? new Date() : undefined,
 		});
 
 		await story.populate("author", "name userType");
@@ -26,58 +21,25 @@ export const createStory = async (req, res) => {
 // Get Stories
 export const getStories = async (req, res) => {
 	try {
-		const { category, tags, page = 1, limit = 10, sortBy = "newest" } = req.query;
-		const skip = (page - 1) * limit;
-
-		let query = { isApproved: true, isActive: true };
-		if (category) query.category = category;
-		if (tags) query.tags = { $in: tags.split(",").map((t) => t.trim().toLowerCase()) };
-
-		let sortOptions = { createdAt: -1 };
-		if (sortBy === "oldest") sortOptions = { createdAt: 1 };
-		if (sortBy === "popular") sortOptions = { viewCount: -1, createdAt: -1 };
-		if (sortBy === "most_liked") sortOptions = { "likes.length": -1, createdAt: -1 };
-
-		const stories = await Story.find(query).populate("author", "name userType").populate("approvedBy", "name").sort(sortOptions).skip(skip).limit(parseInt(limit)).select("-comments");
-
-		const total = await Story.countDocuments(query);
-
-		const result = stories.map((s) => {
-			const obj = s.toObject();
-			if (s.isAnonymous) obj.author = { name: "Anonymous", userType: s.author.userType };
-			return obj;
-		});
-
-		res.json({
-			success: true,
-			data: {
-				stories: result,
-				pagination: {
-					currentPage: Number(page),
-					totalPages: Math.ceil(total / limit),
-					totalStories: total,
-				},
-			},
-		});
+		const stories = await Story.find();
+		res.status(200).json(stories);
 	} catch (err) {
-		res.status(500).json({ success: false, message: "Could not fetch stories" });
+		res.status(500).json({ message: "Failed to fetch stories", error: err.message });
 	}
 };
 
 // Get Single Story
 export const getStoryById = async (req, res) => {
 	try {
-		const story = await Story.findOne({ _id: req.params.id, isApproved: true, isActive: true }).populate("author", "name userType").populate("comments.user", "name userType").populate("approvedBy", "name");
+		const story = await Story.findOne({
+			_id: req.params.id,
+		})
+			.populate("author", "name userType")
+			.populate("comments.user", "name userType");
 
 		if (!story) return res.status(404).json({ success: false, message: "Story not found" });
 
-		await story.incrementViewCount();
-
-		const obj = story.toObject();
-		if (story.isAnonymous) obj.author = { name: "Anonymous", userType: story.author.userType };
-		obj.comments = obj.comments.map((c) => (c.isAnonymous ? { ...c, user: { name: "Anonymous", userType: c.user.userType } } : c));
-
-		res.json({ success: true, data: obj });
+		res.json({ success: true, data: story });
 	} catch (err) {
 		res.status(500).json({ success: false, message: "Could not fetch story" });
 	}
@@ -86,18 +48,26 @@ export const getStoryById = async (req, res) => {
 // Like / Unlike Storye
 export const toggleLikeStory = async (req, res) => {
 	try {
-		const story = await Story.findOne({ _id: req.params.id, isApproved: true, isActive: true });
+		const story = await Story.findById(req.params.id);
 		if (!story) return res.status(404).json({ success: false, message: "Story not found" });
 
-		const liked = story.likes.some((like) => like.user.toString() === req.user.id);
+		const likedIndex = story.likes.findIndex((like) => like.user.toString() === req.user.id);
 
-		if (liked) {
-			await story.removeLike(req.user.id);
-			return res.json({ success: true, data: { liked: false, likeCount: story.likes.length } });
+		if (likedIndex !== -1) {
+			story.likes.splice(likedIndex, 1);
 		} else {
-			await story.addLike(req.user.id);
-			return res.json({ success: true, data: { liked: true, likeCount: story.likes.length } });
+			story.likes.push({ user: req.user.id });
 		}
+
+		await story.save();
+
+		res.json({
+			success: true,
+			data: {
+				liked: likedIndex === -1,
+				likeCount: story.likes.length,
+			},
+		});
 	} catch (err) {
 		res.status(500).json({ success: false, message: "Could not toggle like" });
 	}
@@ -106,20 +76,22 @@ export const toggleLikeStory = async (req, res) => {
 // Add Comment
 export const addComment = async (req, res) => {
 	try {
-		const { content, isAnonymous } = req.body;
+		const { content } = req.body;
 
-		const story = await Story.findOne({ _id: req.params.id, isApproved: true, isActive: true });
+		const story = await Story.findById(req.params.id);
 		if (!story) return res.status(404).json({ success: false, message: "Story not found" });
 
-		await story.addComment(req.user.id, content, isAnonymous || false);
+		const comment = {
+			user: req.user.id,
+			content: content,
+		};
 
-		const updated = await Story.findById(req.params.id).populate("comments.user", "name userType");
-		const newComment = updated.comments[updated.comments.length - 1];
+		story.comments.push(comment);
+		await story.save();
 
-		const obj = newComment.toObject();
-		if (newComment.isAnonymous) obj.user = { name: "Anonymous", userType: newComment.user.userType };
+		const newComment = story.comments[story.comments.length - 1];
 
-		res.status(201).json({ success: true, data: obj });
+		res.status(201).json({ success: true, data: newComment });
 	} catch (err) {
 		res.status(500).json({ success: false, message: "Could not add comment" });
 	}
@@ -128,24 +100,9 @@ export const addComment = async (req, res) => {
 // Get My Stories
 export const getMyStories = async (req, res) => {
 	try {
-		const { page = 1, limit = 10 } = req.query;
-		const skip = (page - 1) * limit;
+		const stories = await Story.find({ author: req.user.id }).populate("author").sort({ createdAt: -1 });
 
-		const stories = await Story.find({ author: req.user.id, isActive: true }).populate("approvedBy", "name").sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit)).select("-comments");
-
-		const total = await Story.countDocuments({ author: req.user.id, isActive: true });
-
-		res.json({
-			success: true,
-			data: {
-				stories,
-				pagination: {
-					currentPage: Number(page),
-					totalPages: Math.ceil(total / limit),
-					totalStories: total,
-				},
-			},
-		});
+		res.json({ success: true, data: stories });
 	} catch (err) {
 		res.status(500).json({ success: false, message: "Could not fetch your stories" });
 	}

@@ -24,15 +24,6 @@ const storySchema = new mongoose.Schema(
 			required: true,
 			enum: ["personal_story", "advice", "educational", "support", "awareness"],
 		},
-		tags: [String],
-		isAnonymous: {
-			type: Boolean,
-			default: false,
-		},
-		isApproved: {
-			type: Boolean,
-			default: false,
-		},
 		likes: [
 			{
 				user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -47,18 +38,6 @@ const storySchema = new mongoose.Schema(
 				createdAt: { type: Date, default: Date.now },
 			},
 		],
-		viewCount: {
-			type: Number,
-			default: 0,
-		},
-		reportCount: {
-			type: Number,
-			default: 0,
-		},
-		isActive: {
-			type: Boolean,
-			default: true,
-		},
 	},
 	{ timestamps: true }
 );
