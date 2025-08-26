@@ -1,15 +1,15 @@
-const express = require("express");
-const { protect } = require("../middleware/auth");
-const { createStory, getStories, getStoryById, toggleLikeStory, addComment, getMyStories } = require("../controllers/storyController");
+import express from "express";
+import { addComment, createStory, getMyStories, getStories, getStoryById, toggleLikeStory } from "../controllers/storyController.js";
+import { protectRoute } from "../middleware/protectRoute.js";
 
 const router = express.Router();
 
 // Stories
-router.post("/", protect, createStory);
+router.post("/", protectRoute, createStory);
 router.get("/", getStories);
 router.get("/:id", getStoryById);
-router.post("/:id/like", protect, toggleLikeStory);
-router.post("/:id/comments", protect, addComment);
-router.get("/my/posts", protect, getMyStories);
+router.post("/:id/like", protectRoute, toggleLikeStory);
+router.post("/:id/comments", protectRoute, addComment);
+router.get("/my/posts", protectRoute, getMyStories);
 
-module.exports = router;
+export default router;

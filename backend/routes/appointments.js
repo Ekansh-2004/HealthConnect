@@ -1,22 +1,22 @@
-const express = require("express");
-const { protect, authorize } = require("../middleware/auth");
-const { createAppointment, getAppointments, updateAppointmentStatus, getHealthProfessionals, cancelAppointment } = require("../controllers/appointmentController");
+import express from "express";
+import { cancelAppointment, createAppointment, getAppointments, getHealthProfessionals, updateAppointmentStatus } from "../controllers/appointmentController.js";
+import { protectRoute } from "../middleware/protectRoute.js";
 
 const router = express.Router();
 
 // Create appointment (Adults & Adolescents)
-router.post("/", protect, authorize("adult", "adolescent"), createAppointment);
+router.post("/", protectRoute, createAppointment);
 
 // Get appointments (by user role)
-router.get("/", protect, getAppointments);
+router.get("/", protectRoute, getAppointments);
 
 // Update status (Health professional only)
-router.put("/:id/status", protect, authorize("health_prof"), updateAppointmentStatus);
+router.put("/:id/status", protectRoute, updateAppointmentStatus);
 
 // Get health professionals
-router.get("/health-professionals", protect, authorize("adult", "adolescent"), getHealthProfessionals);
+router.get("/health-professionals", protectRoute, getHealthProfessionals);
 
 // Cancel appointment (Patients only)
-router.delete("/:id", protect, authorize("adult", "adolescent"), cancelAppointment);
+router.delete("/:id", protectRoute, cancelAppointment);
 
-module.exports = router;
+export default router;

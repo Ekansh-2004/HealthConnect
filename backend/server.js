@@ -1,11 +1,16 @@
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const helmet = require("helmet");
-const morgan = require("morgan");
-const connectDB = require("./config/db");
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import helmet from "helmet";
+import morgan from "morgan";
+import connectDB from "./config/db.js";
 
-// Load environment variables
+// Import routes (must use .js extension in ESM)
+import appointmentRoutes from "./routes/appointments.js";
+import authRoutes from "./routes/auth.js";
+import storyRoutes from "./routes/stories.js";
+
 dotenv.config();
 
 // Connect to MongoDB
@@ -20,6 +25,7 @@ app.use(
 		credentials: true,
 	})
 );
+app.use(cookieParser());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -32,9 +38,9 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Routes
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/appointments", require("./routes/appointments"));
-app.use("/api/stories", require("./routes/stories"));
+app.use("/api/auth", authRoutes);
+app.use("/api/appointments", appointmentRoutes);
+app.use("/api/stories", storyRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {

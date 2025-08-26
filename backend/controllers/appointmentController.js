@@ -1,8 +1,8 @@
-const Appointment = require("../models/Appointment");
-const User = require("../models/User");
+import Appointment from "../models/Appointment.js";
+import User from "../models/User.js";
 
 // Create new appointment
-const createAppointment = async (req, res) => {
+export const createAppointment = async (req, res) => {
 	try {
 		const { healthProfessionalId, appointmentDate, appointmentTime, description, isUrgent } = req.body;
 
@@ -27,7 +27,7 @@ const createAppointment = async (req, res) => {
 };
 
 // Get all appointments (patient sees their own, doctors see their own)
-const getAppointments = async (req, res) => {
+export const getAppointments = async (req, res) => {
 	try {
 		let query = req.user.userType === "health_prof" ? { healthProfessional: req.user.id } : { patient: req.user.id };
 
@@ -40,7 +40,7 @@ const getAppointments = async (req, res) => {
 };
 
 // Update status (accept / reject / complete)
-const updateAppointmentStatus = async (req, res) => {
+export const updateAppointmentStatus = async (req, res) => {
 	try {
 		const { status, rejectionReason, notes, meetingLink } = req.body;
 		const appointment = await Appointment.findOne({ _id: req.params.id, healthProfessional: req.user.id });
@@ -60,7 +60,7 @@ const updateAppointmentStatus = async (req, res) => {
 };
 
 // Get list of health professionals
-const getHealthProfessionals = async (req, res) => {
+export const getHealthProfessionals = async (req, res) => {
 	try {
 		const healthProfessionals = await User.find({ userType: "health_prof", isActive: true }).select("name email");
 		res.json({ success: true, data: healthProfessionals });
@@ -70,7 +70,7 @@ const getHealthProfessionals = async (req, res) => {
 };
 
 // Cancel appointment
-const cancelAppointment = async (req, res) => {
+export const cancelAppointment = async (req, res) => {
 	try {
 		const appointment = await Appointment.findOne({ _id: req.params.id, patient: req.user.id });
 		if (!appointment) return res.status(404).json({ success: false, message: "Appointment not found" });
@@ -82,12 +82,4 @@ const cancelAppointment = async (req, res) => {
 	} catch (error) {
 		res.status(500).json({ success: false, message: "Something went wrong" });
 	}
-};
-
-module.exports = {
-	createAppointment,
-	getAppointments,
-	updateAppointmentStatus,
-	getHealthProfessionals,
-	cancelAppointment,
 };

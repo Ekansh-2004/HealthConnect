@@ -1,7 +1,6 @@
-const Story = require("../models/Story");
-
+import Story from "../models/Story.js";
 // Create Story
-const createStory = async (req, res) => {
+export const createStory = async (req, res) => {
 	try {
 		const { title, content, category, tags, isAnonymous } = req.body;
 
@@ -25,7 +24,7 @@ const createStory = async (req, res) => {
 };
 
 // Get Stories
-const getStories = async (req, res) => {
+export const getStories = async (req, res) => {
 	try {
 		const { category, tags, page = 1, limit = 10, sortBy = "newest" } = req.query;
 		const skip = (page - 1) * limit;
@@ -66,7 +65,7 @@ const getStories = async (req, res) => {
 };
 
 // Get Single Story
-const getStoryById = async (req, res) => {
+export const getStoryById = async (req, res) => {
 	try {
 		const story = await Story.findOne({ _id: req.params.id, isApproved: true, isActive: true }).populate("author", "name userType").populate("comments.user", "name userType").populate("approvedBy", "name");
 
@@ -84,8 +83,8 @@ const getStoryById = async (req, res) => {
 	}
 };
 
-// Like / Unlike Story
-const toggleLikeStory = async (req, res) => {
+// Like / Unlike Storye
+export const toggleLikeStory = async (req, res) => {
 	try {
 		const story = await Story.findOne({ _id: req.params.id, isApproved: true, isActive: true });
 		if (!story) return res.status(404).json({ success: false, message: "Story not found" });
@@ -105,7 +104,7 @@ const toggleLikeStory = async (req, res) => {
 };
 
 // Add Comment
-const addComment = async (req, res) => {
+export const addComment = async (req, res) => {
 	try {
 		const { content, isAnonymous } = req.body;
 
@@ -127,7 +126,7 @@ const addComment = async (req, res) => {
 };
 
 // Get My Stories
-const getMyStories = async (req, res) => {
+export const getMyStories = async (req, res) => {
 	try {
 		const { page = 1, limit = 10 } = req.query;
 		const skip = (page - 1) * limit;
@@ -151,5 +150,3 @@ const getMyStories = async (req, res) => {
 		res.status(500).json({ success: false, message: "Could not fetch your stories" });
 	}
 };
-
-module.exports = { createStory, getStories, getStoryById, toggleLikeStory, addComment, getMyStories };
