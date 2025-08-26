@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { BookOpen, Award, Volume2, Eye, RotateCcw } from 'lucide-react';
 import QuizComponent from './QuizComponent';
 import MythFactCards from './MythFactCards';
 
 const LearnPage = () => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('articles');
   const [speakingText, setSpeakingText] = useState(null);
 

@@ -1,15 +1,15 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { BookOpen, MessageCircle, Award, Volume2 } from 'lucide-react';
 
 const AdolescentDashboard = () => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">{t('dashboard.welcome')}</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Welcome</h1>
         <p className="mt-2 text-gray-600">
           Learn about sexual health in a safe, age-appropriate environment
         </p>

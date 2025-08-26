@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider, useSelector } from 'react-redux';
 import { store } from './store';
-import './i18n';
 
 import Layout from './components/Layout/Layout';
 import LoginForm from './components/Auth/LoginForm';
