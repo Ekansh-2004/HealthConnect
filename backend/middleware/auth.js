@@ -1,13 +1,15 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-// Protect routes - verify JWT token
+// Protect routes - verify JWT token from cookie or header
 const protect = async (req, res, next) => {
 	try {
 		let token;
 
-		// Check for token in header
-		if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+		// Check for token in cookie first, then header
+		if (req.cookies.jwt) {
+			token = req.cookies.jwt;
+		} else if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
 			token = req.headers.authorization.split(" ")[1];
 		}
 
@@ -15,45 +17,51 @@ const protect = async (req, res, next) => {
 		if (!token) {
 			return res.status(401).json({
 				success: false,
-				message: "Not authorized to access this resource - No token provided",
+				message: "Not authorized to access this resource",
 			});
 		}
 
-		try {
-			// Verify token
-			const decoded = jwt.verify(token, process.env.JWT_SECRET);
+		// Verify token
+		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-			// Find user by id
-			const user = await User.findById(decoded.id).select("-password");
+		// Find user by id
+		const user = await User.findById(decoded.id).select("-password");
 
-			if (!user) {
-				return res.status(401).json({
-					success: false,
-					message: "User not found - Token is invalid",
-				});
-			}
-
-			if (!user.isActive) {
-				return res.status(401).json({
-					success: false,
-					message: "Account is deactivated",
-				});
-			}
-
-			// Add user to request object
-			req.user = user;
-			next();
-		} catch (error) {
+		if (!user) {
 			return res.status(401).json({
 				success: false,
-				message: "Not authorized to access this resource - Invalid token",
+				message: "Not authorized to access this resource",
 			});
 		}
+
+		if (!user.isActive) {
+			return res.status(403).json({
+				success: false,
+				message: "Account is deactivated",
+			});
+		}
+
+		// Check if token was issued before any password reset
+		if (user.passwordChangedAt) {
+			const passwordChangedTimestamp = parseInt(user.passwordChangedAt.getTime() / 1000, 10);
+
+			if (decoded.iat < passwordChangedTimestamp) {
+				return res.status(401).json({
+					success: false,
+					message: "Not authorized to access this resource",
+				});
+			}
+		}
+
+		// Add user to request object
+		req.user = user;
+		next();
 	} catch (error) {
 		console.error("Auth middleware error:", error);
-		return res.status(500).json({
+
+		return res.status(401).json({
 			success: false,
-			message: "Server error during authentication",
+			message: "Not authorized to access this resource",
 		});
 	}
 };
@@ -64,14 +72,14 @@ const authorize = (...userTypes) => {
 		if (!req.user) {
 			return res.status(401).json({
 				success: false,
-				message: "User not authenticated",
+				message: "Authentication required",
 			});
 		}
 
 		if (!userTypes.includes(req.user.userType)) {
 			return res.status(403).json({
 				success: false,
-				message: `User type '${req.user.userType}' is not authorized to access this resource`,
+				message: "Insufficient privileges to access this resource",
 			});
 		}
 
