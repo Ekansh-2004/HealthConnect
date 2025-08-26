@@ -1,12 +1,15 @@
-// src/components/LoginForm.jsx
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { Heart, Mail, Lock, User } from 'lucide-react';
+import { loginSuccess } from '../../store/slices/authSlice';
 
 const LoginForm = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -15,9 +18,16 @@ const LoginForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // For frontend demo only
-    console.log("Login submitted:", formData);
+    
+    // Mock authentication - replace with actual API call
+    const mockUser = {
+      id: '1',
+      email: formData.email,
+      name: 'Demo User',
+      role: formData.role
+    };
+    
+    dispatch(loginSuccess(mockUser));
     navigate('/dashboard');
   };
 
@@ -34,9 +44,10 @@ const LoginForm = () => {
         
         <form className="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-md" onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {/* Email */}
             <div>
-              <label htmlFor="email" className="sr-only">Email</label>
+              <label htmlFor="email" className="sr-only">
+                {t('auth.email')}
+              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="h-5 w-5 text-gray-400" />
@@ -46,17 +57,18 @@ const LoginForm = () => {
                   name="email"
                   type="email"
                   required
-                  className="appearance-none rounded-md relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="Email"
+                  className="appearance-none rounded-md relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  placeholder={t('auth.email')}
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
               </div>
             </div>
             
-            {/* Password */}
             <div>
-              <label htmlFor="password" className="sr-only">Password</label>
+              <label htmlFor="password" className="sr-only">
+                {t('auth.password')}
+              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="h-5 w-5 text-gray-400" />
@@ -66,17 +78,18 @@ const LoginForm = () => {
                   name="password"
                   type="password"
                   required
-                  className="appearance-none rounded-md relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="Password"
+                  className="appearance-none rounded-md relative block w-full pl-10 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  placeholder={t('auth.password')}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 />
               </div>
             </div>
             
-            {/* Role */}
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">Role</label>
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
+                {t('auth.role')}
+              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <User className="h-5 w-5 text-gray-400" />
@@ -84,25 +97,24 @@ const LoginForm = () => {
                 <select
                   id="role"
                   name="role"
-                  className="appearance-none rounded-md relative block w-full pl-10 px-3 py-2 border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none rounded-md relative block w-full pl-10 px-3 py-2 border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                 >
-                  <option value="adolescent">Adolescent</option>
-                  <option value="adult">Adult</option>
-                  <option value="healthcare_professional">Healthcare Professional</option>
+                  <option value="adolescent">{t('auth.adolescent')}</option>
+                  <option value="adult">{t('auth.adult')}</option>
+                  <option value="healthcare_professional">{t('auth.healthcare')}</option>
                 </select>
               </div>
             </div>
           </div>
 
-          {/* Submit button */}
           <div>
             <button
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
             >
-              Login
+              {t('auth.login')}
             </button>
           </div>
         </form>
