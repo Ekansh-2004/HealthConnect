@@ -6,6 +6,7 @@ import './i18n';
 
 import Layout from './components/Layout/Layout';
 import LoginForm from './components/Auth/LoginForm';
+import SignupForm from './components/Auth/SignupForm';
 import Dashboard from './components/Dashboard/Dashboard';
 import LearnPage from './components/Learn/LearnPage';
 import StoriesPage from './components/Stories/StoriesPage';
@@ -24,6 +25,10 @@ const AppContent = () => {
         <Route 
           path="/login" 
           element={!isAuthenticated ? <LoginForm /> : <Navigate to="/dashboard" replace />} 
+        />
+        <Route 
+          path="/signup" 
+          element={!isAuthenticated ? <SignupForm /> : <Navigate to="/dashboard" replace />} 
         />
         
         <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>

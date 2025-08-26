@@ -86,27 +86,7 @@ const LoginForm = () => {
               </div>
             </div>
             
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
-                {t('auth.role')}
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
-                </div>
-                <select
-                  id="role"
-                  name="role"
-                  className="appearance-none rounded-md relative block w-full pl-10 px-3 py-2 border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                  value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                >
-                  <option value="adolescent">{t('auth.adolescent')}</option>
-                  <option value="adult">{t('auth.adult')}</option>
-                  <option value="healthcare_professional">{t('auth.healthcare')}</option>
-                </select>
-              </div>
-            </div>
+           
           </div>
 
           <div>
@@ -116,6 +96,9 @@ const LoginForm = () => {
             >
               {t('auth.login')}
             </button>
+          </div>
+          <div className="text-center text-sm">
+           New Here?! <a href="/signup" className="font-medium text-blue-600 hover:text-blue-500">{t('auth.signup')}</a>
           </div>
         </form>
       </div>
