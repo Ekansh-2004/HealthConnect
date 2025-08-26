@@ -1,54 +1,46 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { Heart, Menu, Globe, LogOut, User } from 'lucide-react';
+import { Heart, Menu, LogOut, User } from 'lucide-react';
 import { logout } from '../../store/slices/authSlice';
 
 const Navbar = () => {
-  const { t, i18n } = useTranslation();
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [isLangMenuOpen, setIsLangMenuOpen] = React.useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
   };
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-    setIsLangMenuOpen(false);
-  };
-
   const navItems = React.useMemo(() => {
     if (!isAuthenticated || !user) return [];
     
     const baseItems = [
-      { key: 'home', path: '/dashboard', label: t('nav.home') },
-      { key: 'learn', path: '/learn', label: t('nav.learn') },
-      { key: 'chat', path: '/chat', label: t('nav.chat') },
+      { key: 'home', path: '/dashboard', label: 'Home' },
+      { key: 'learn', path: '/learn', label: 'Learn' },
+      { key: 'chat', path: '/chat', label: 'Chat' },
     ];
 
     if (user.role === 'adult') {
       baseItems.push(
-        { key: 'stories', path: '/stories', label: t('nav.stories') },
-        { key: 'consultations', path: '/consultations', label: t('nav.consultations') }
+        { key: 'stories', path: '/stories', label: 'Stories' },
+        { key: 'consultations', path: '/consultations', label: 'Consultations' }
       );
     }
 
     if (user.role === 'healthcare_professional') {
       baseItems.push(
-        { key: 'admin', path: '/admin', label: t('nav.admin') }
+        { key: 'admin', path: '/admin', label: 'Admin' }
       );
     }
 
     return baseItems;
-  }, [isAuthenticated, user, t]);
+  }, [isAuthenticated, user]);
 
   if (!isAuthenticated) return null;
 
@@ -83,36 +75,6 @@ const Navbar = () => {
 
           {/* Right side items */}
           <div className="flex items-center space-x-4">
-            {/* Language Selector */}
-            <div className="relative">
-              <button
-                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                className="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                <Globe className="h-4 w-4" />
-                <span>{i18n.language === 'hi' ? 'हिं' : 'EN'}</span>
-              </button>
-              
-              {isLangMenuOpen && (
-                <div className="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
-                  <div className="py-1">
-                    <button
-                      onClick={() => changeLanguage('en')}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      English
-                    </button>
-                    <button
-                      onClick={() => changeLanguage('hi')}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      हिंदी
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
             {/* User Menu */}
             <div className="flex items-center space-x-2">
               <User className="h-5 w-5 text-gray-600" />
@@ -120,7 +82,7 @@ const Navbar = () => {
               <button
                 onClick={handleLogout}
                 className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                title={t('nav.logout')}
+                title="Logout"
               >
                 <LogOut className="h-4 w-4" />
               </button>

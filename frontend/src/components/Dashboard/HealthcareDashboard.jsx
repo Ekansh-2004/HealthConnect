@@ -1,10 +1,10 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import { Users, MessageSquare, BookOpen, TrendingUp, Calendar, AlertTriangle } from 'lucide-react';
 
 const HealthcareDashboard = () => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   // Mock data for analytics
   const monthlyData = [
@@ -32,7 +32,7 @@ const HealthcareDashboard = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">{t('dashboard.welcome')}, Dr. Smith</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Welcome Dr. Smith</h1>
         <p className="mt-2 text-gray-600">
           Monitor platform activity and manage content moderation
         </p>

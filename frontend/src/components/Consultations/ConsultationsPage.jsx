@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Calendar, Clock, Video, User, Plus, CheckCircle, Phone } from 'lucide-react';
 
 const ConsultationsPage = () => {
-  const { t } = useTranslation();
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
@@ -18,7 +16,8 @@ const ConsultationsPage = () => {
       specialty: 'General Sexual Health',
       rating: 4.9,
       experience: '12 years',
-      image: 'https://images.pexels.com/photos/5327580/pexels-photo-5327580.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop'
+      image:
+        'https://images.pexels.com/photos/5327580/pexels-photo-5327580.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
     },
     {
       id: '2',
@@ -26,7 +25,8 @@ const ConsultationsPage = () => {
       specialty: 'Reproductive Health',
       rating: 4.8,
       experience: '9 years',
-      image: 'https://images.pexels.com/photos/6303761/pexels-photo-6303761.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop'
+      image:
+        'https://images.pexels.com/photos/6303761/pexels-photo-6303761.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
     },
     {
       id: '3',
@@ -34,8 +34,9 @@ const ConsultationsPage = () => {
       specialty: 'Adolescent Health',
       rating: 4.9,
       experience: '8 years',
-      image: 'https://images.pexels.com/photos/5327921/pexels-photo-5327921.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop'
-    }
+      image:
+        'https://images.pexels.com/photos/5327921/pexels-photo-5327921.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+    },
   ];
 
   const appointments = [
@@ -46,7 +47,7 @@ const ConsultationsPage = () => {
       date: '2024-01-25',
       time: '14:00',
       type: 'video',
-      status: 'upcoming'
+      status: 'upcoming',
     },
     {
       id: '2',
@@ -55,33 +56,40 @@ const ConsultationsPage = () => {
       date: '2024-01-20',
       time: '10:30',
       type: 'phone',
-      status: 'completed'
-    }
+      status: 'completed',
+    },
   ];
 
   const availableTimes = [
-    '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-    '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'
+    '09:00',
+    '09:30',
+    '10:00',
+    '10:30',
+    '11:00',
+    '11:30',
+    '14:00',
+    '14:30',
+    '15:00',
+    '15:30',
+    '16:00',
+    '16:30',
   ];
 
   const handleBookAppointment = () => {
-    // In a real app, this would make an API call
     console.log('Booking appointment:', {
       doctor: selectedDoctor,
       date: selectedDate,
       time: selectedTime,
       type: consultationType,
-      reason: reason
+      reason: reason,
     });
-    
-    // Reset form and close
+
     setShowBookingForm(false);
     setSelectedDate('');
     setSelectedTime('');
     setSelectedDoctor('');
     setReason('');
-    
-    // Show success message (in real app, this would be handled by global state)
+
     alert('Appointment booked successfully!');
   };
 
@@ -89,12 +97,12 @@ const ConsultationsPage = () => {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">{t('consultations.book')}</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Book Consultation</h1>
           <p className="mt-2 text-gray-600">
             Book confidential consultations with healthcare professionals
           </p>
         </div>
-        
+
         {!showBookingForm && (
           <button
             onClick={() => setShowBookingForm(true)}
@@ -109,8 +117,10 @@ const ConsultationsPage = () => {
       {/* Booking Form */}
       {showBookingForm && (
         <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Book New Appointment</h2>
-          
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            Book New Appointment
+          </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Doctor Selection */}
             <div>
@@ -135,8 +145,12 @@ const ConsultationsPage = () => {
                         className="w-12 h-12 rounded-full object-cover"
                       />
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900">{doctor.name}</h4>
-                        <p className="text-sm text-gray-600">{doctor.specialty}</p>
+                        <h4 className="font-semibold text-gray-900">
+                          {doctor.name}
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          {doctor.specialty}
+                        </p>
                         <p className="text-xs text-gray-500">
                           ⭐ {doctor.rating} • {doctor.experience}
                         </p>
@@ -248,25 +262,38 @@ const ConsultationsPage = () => {
 
       {/* Upcoming Appointments */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">{t('consultations.upcoming')}</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          Upcoming Appointments
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {appointments
-            .filter(apt => apt.status === 'upcoming')
+            .filter((apt) => apt.status === 'upcoming')
             .map((appointment) => (
-              <div key={appointment.id} className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+              <div
+                key={appointment.id}
+                className="bg-white rounded-lg shadow-md p-6 border border-gray-200"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <User className="h-8 w-8 text-blue-600" />
                     <div>
-                      <h3 className="font-semibold text-gray-900">{appointment.doctorName}</h3>
-                      <p className="text-sm text-gray-600">{appointment.specialty}</p>
+                      <h3 className="font-semibold text-gray-900">
+                        {appointment.doctorName}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {appointment.specialty}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center text-blue-600">
-                    {appointment.type === 'video' ? <Video className="h-5 w-5" /> : <Phone className="h-5 w-5" />}
+                    {appointment.type === 'video' ? (
+                      <Video className="h-5 w-5" />
+                    ) : (
+                      <Phone className="h-5 w-5" />
+                    )}
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
                   <div className="flex items-center">
                     <Calendar className="h-4 w-4 mr-1" />
@@ -279,7 +306,7 @@ const ConsultationsPage = () => {
                 </div>
 
                 <button className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-                  {t('consultations.join')}
+                  Join Appointment
                 </button>
               </div>
             ))}
@@ -288,18 +315,27 @@ const ConsultationsPage = () => {
 
       {/* Past Appointments */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Past Appointments</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          Past Appointments
+        </h2>
         <div className="space-y-4">
           {appointments
-            .filter(apt => apt.status === 'completed')
+            .filter((apt) => apt.status === 'completed')
             .map((appointment) => (
-              <div key={appointment.id} className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
+              <div
+                key={appointment.id}
+                className="bg-white rounded-lg shadow-md p-4 border border-gray-200"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-6 w-6 text-green-600" />
                     <div>
-                      <h4 className="font-medium text-gray-900">{appointment.doctorName}</h4>
-                      <p className="text-sm text-gray-600">{appointment.specialty}</p>
+                      <h4 className="font-medium text-gray-900">
+                        {appointment.doctorName}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {appointment.specialty}
+                      </p>
                     </div>
                   </div>
                   <div className="text-right text-sm text-gray-600">

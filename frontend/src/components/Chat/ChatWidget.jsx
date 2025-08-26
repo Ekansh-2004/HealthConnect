@@ -1,11 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { MessageCircle, Send, X, Minimize2, Calendar } from 'lucide-react';
 import { toggleChat, addMessage, setLoading } from '../../store/slices/chatSlice';
 
 const ChatWidget = () => {
-  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { messages, isOpen, loading } = useSelector((state) => state.chat);
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -118,7 +116,7 @@ const ChatWidget = () => {
           <div className="flex items-center justify-between p-4 bg-blue-600 text-white rounded-t-lg">
             <div className="flex items-center space-x-2">
               <MessageCircle className="h-5 w-5" />
-              <h3 className="font-semibold">{t('chat.title')}</h3>
+              <h3 className="font-semibold">Sexual Health Chat</h3>
             </div>
             <div className="flex items-center space-x-2">
               <button
@@ -188,7 +186,7 @@ const ChatWidget = () => {
           <div className="p-3 border-t border-gray-200">
             <button className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm mb-3">
               <Calendar className="h-4 w-4 mr-2" />
-              {t('chat.connect_doctor')}
+              Connect with a Doctor
             </button>
           </div>
 
@@ -199,7 +197,7 @@ const ChatWidget = () => {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={t('chat.placeholder')}
+                placeholder="Type your message..."
                 className="flex-1 resize-none px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 rows={1}
               />
