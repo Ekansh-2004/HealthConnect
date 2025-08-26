@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { Heart, MessageSquare, Share2, Plus, Clock, CheckCircle } from 'lucide-react';
 import { addStory } from '../../store/slices/contentSlice';
 
 const StoriesPage = () => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const dispatch = useDispatch();
   const { stories } = useSelector((state) => state.content);
   
@@ -85,7 +85,7 @@ const StoriesPage = () => {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">{t('stories.title')}</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Community Stories</h1>
           <p className="mt-2 text-gray-600">
             Share your experiences and learn from others in our supportive community
           </p>
@@ -97,7 +97,7 @@ const StoriesPage = () => {
             className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             <Plus className="h-4 w-4 mr-2" />
-            {t('stories.submit')}
+            Share Your Story
           </button>
         )}
       </div>
@@ -147,7 +147,7 @@ const StoriesPage = () => {
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                 <p className="text-sm text-blue-800">
-                  <strong>Anonymous Sharing:</strong> {t('stories.anonymous')}
+                  <strong>Anonymous Sharing:</strong> Your story will be shared anonymously
                 </p>
               </div>
 
@@ -208,13 +208,6 @@ const StoriesPage = () => {
             </div>
           </div>
         ))}
-      </div>
-
-      {/* Load More Button */}
-      <div className="text-center mt-8">
-        <button className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
-          Load More Stories
-        </button>
       </div>
     </div>
   );
