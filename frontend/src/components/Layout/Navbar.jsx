@@ -1,22 +1,21 @@
 import { Heart, LogOut, Menu, User } from "lucide-react";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+
+import { Link, useLocation } from "react-router-dom";
+import { useUserStore } from "../../store/useUserStore.jsx";
 
 const Navbar = () => {
-	const { user, isAuthenticated } = useSelector((state) => state.auth);
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
+	const { user, logout } = useUserStore();
+
+	useEffect(() => {
+		// runs whenever user changes
+	}, [user]);
 	const location = useLocation();
 
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-	const handleLogout = () => {
-		navigate("/login");
-	};
-
 	const navItems = React.useMemo(() => {
-		if (!isAuthenticated || !user) return [];
+		if (!user) return [];
 
 		const baseItems = [
 			{ key: "home", path: "/dashboard", label: "Home" },
@@ -24,18 +23,18 @@ const Navbar = () => {
 			{ key: "chat", path: "/chat", label: "Chat" },
 		];
 
-		if (user.role === "adult") {
+		if (user.userType === "adult") {
 			baseItems.push({ key: "stories", path: "/stories", label: "Stories" }, { key: "consultations", path: "/consultations", label: "Consultations" });
 		}
 
-		if (user.role === "healthcare_professional") {
+		if (user.userType === "healthcare_professional") {
 			baseItems.push({ key: "admin", path: "/admin", label: "Admin" });
 		}
 
 		return baseItems;
-	}, [isAuthenticated, user]);
+	}, [user]);
 
-	if (!isAuthenticated) return null;
+	if (!user) return null;
 
 	return (
 		<nav className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50">
@@ -72,7 +71,7 @@ const Navbar = () => {
 							<User className="h-5 w-5 text-gray-600" />
 							<span className="text-sm font-medium text-gray-700">{user?.name}</span>
 							<button
-								onClick={handleLogout}
+								onClick={logout}
 								className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
 								title="Logout"
 							>

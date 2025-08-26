@@ -45,11 +45,10 @@ export const register = async (req, res) => {
 		}
 	} catch (error) {
 		console.log("Error in signup controller", error.message);
-		res.status(500).json({ error: "Internal Server Error" });
+		return res.status(500).json({ error: "Internal Server Error" });
 	}
 };
-
-// LOGIN IN FUNCTION
+// LOGIN FUNCTION - FIXED
 export const login = async (req, res) => {
 	try {
 		const { email, password } = req.body;
@@ -57,25 +56,27 @@ export const login = async (req, res) => {
 		const user = await User.findOne({ email });
 
 		if (!user) {
-			res.status(400).json({ error: "Invalid email" });
+			return res.status(400).json({ error: "Invalid email" }); // Added return
 		}
-		//check whether the password submitted is equal to the password in the db
+
+		// Check whether the password submitted is equal to the password in the db
 		const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
 		if (!isPasswordCorrect) {
-			res.status(400).json({ error: "Invalid Password" });
+			return res.status(400).json({ error: "Invalid Password" }); // Added return
 		}
 
 		generateTokenAndSetCookie(user._id, res);
-		res.status(201).json({
+		return res.status(201).json({
+			// Added return (good practice)
 			_id: user._id,
 			name: user.name,
 			email: user.email,
 		});
 	} catch (error) {
-		res.status(500).json({ error: "Internal Server Error" });
+		console.log("Error in login controller", error.message);
+		return res.status(500).json({ error: "Internal Server Error" }); // Added return
 	}
 };
-
 // LOG OUT FUNCTION
 export const logout = async (req, res) => {
 	try {

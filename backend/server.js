@@ -21,7 +21,7 @@ const app = express();
 // Middleware
 app.use(
 	cors({
-		origin: process.env.CLIENT_URL?.split(",") || ["http://localhost:3000"], // supports multiple origins
+		origin: "http://localhost:5173", // your frontend URL
 		credentials: true,
 	})
 );

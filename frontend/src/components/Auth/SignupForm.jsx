@@ -1,27 +1,22 @@
 import { Calendar, Heart, Lock, Mail, User } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store/useUserStore.jsx";
 
 const SignupForm = () => {
 	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		name: "",
-		roleGroup: "", // instead of age
+		userType: "", // instead of age
 		email: "",
 		password: "",
 	});
 
+	const { register, user, loading } = useUserStore();
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
-		// Mock authentication - replace with actual API call
-		const mockUser = {
-			id: "2",
-			name: formData.name,
-			email: formData.email,
-			roleGroup: formData.roleGroup,
-			role: "user",
-		};
+		register(formData);
 		navigate("/dashboard");
 	};
 
@@ -69,7 +64,7 @@ const SignupForm = () => {
 						{/* Role Group Dropdown */}
 						<div>
 							<label
-								htmlFor="roleGroup"
+								htmlFor="userType"
 								className="sr-only"
 							>
 								Role Group
@@ -79,12 +74,12 @@ const SignupForm = () => {
 									<Calendar className="h-5 w-5 text-gray-400" />
 								</div>
 								<select
-									id="roleGroup"
-									name="roleGroup"
+									id="userType"
+									name="userType"
 									required
 									className="appearance-none rounded-md relative block w-full pl-10 pr-3 py-2 border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-									value={formData.roleGroup}
-									onChange={(e) => setFormData({ ...formData, roleGroup: e.target.value })}
+									value={formData.userType}
+									onChange={(e) => setFormData({ ...formData, userType: e.target.value })}
 								>
 									<option
 										value=""
@@ -94,7 +89,7 @@ const SignupForm = () => {
 									</option>
 									<option value="adolescent">Adolescent (10–18)</option>
 									<option value="adult">Adult (18+)</option>
-									<option value="expert">Professional / Expert</option>
+									<option value="health_prof">Professional / Expert</option>
 								</select>
 							</div>
 						</div>

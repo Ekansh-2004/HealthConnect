@@ -1,18 +1,19 @@
+import { useUserStore } from "../../store/useUserStore";
 import AdolescentDashboard from "./AdolescentDashboard";
 import AdultDashboard from "./AdultDashboard";
 import HealthcareDashboard from "./HealthcareDashboard";
 
 const Dashboard = () => {
-	const user = { role: "adult" };
+	const { user } = useUserStore();
 
 	if (!user) return null;
 
-	switch (user.role) {
+	switch (user?.userType) {
 		case "adolescent":
 			return <AdolescentDashboard />;
 		case "adult":
 			return <AdultDashboard />;
-		case "healthcare_professional":
+		case "health_prof":
 			return <HealthcareDashboard />;
 		default:
 			return <AdultDashboard />;

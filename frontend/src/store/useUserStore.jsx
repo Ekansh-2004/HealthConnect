@@ -1,5 +1,4 @@
 import { create } from "zustand";
-
 import axios from "../api/axios.js";
 
 export const useUserStore = create((set, get) => ({
@@ -9,10 +8,8 @@ export const useUserStore = create((set, get) => ({
 
 	register: async ({ name, email, password, userType }) => {
 		set({ loading: true });
-
 		try {
 			const res = await axios.post("/auth/register", { name, email, password, userType });
-			console.log(res.data);
 			set({ user: res.data, loading: false });
 		} catch (error) {
 			set({ loading: false });
@@ -21,7 +18,6 @@ export const useUserStore = create((set, get) => ({
 
 	login: async ({ email, password }) => {
 		set({ loading: true });
-
 		try {
 			const res = await axios.post("/auth/login", { email, password });
 			set({ user: res.data, loading: false });
@@ -31,17 +27,32 @@ export const useUserStore = create((set, get) => ({
 	},
 
 	logout: async () => {
+		set({ loading: true }); // Show loading during logout
 		try {
 			await axios.post("/auth/logout");
-			set({ user: null });
-		} catch (error) {}
+			// Clear ALL user-related state
+			set({
+				user: null,
+				loading: false,
+				error: null,
+				checkingAuth: false,
+			});
+		} catch (error) {
+			console.error("Logout error:", error);
+			// Even if logout fails on server, clear local state
+			set({
+				user: null,
+				loading: false,
+				error: null,
+				checkingAuth: false,
+			});
+		}
 	},
 
 	checkAuth: async () => {
 		set({ checkingAuth: true });
 		try {
 			const res = await axios.get("/auth/me");
-
 			set({ user: res.data, checkingAuth: false });
 		} catch (error) {
 			set({ checkingAuth: false, user: null });

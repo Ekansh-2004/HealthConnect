@@ -11,6 +11,27 @@ import StoriesPage from "./components/Stories/StoriesPage";
 import { useEffect } from "react";
 import { useUserStore } from "./store/useUserStore.jsx";
 
+// ProtectedRoute wrapper
+const ProtectedRoute = ({ children }) => {
+	const { user, checkingAuth } = useUserStore();
+
+	if (checkingAuth) {
+		// Show nothing or a loading spinner while auth status is being checked
+		return <div>Loading...</div>;
+	}
+
+	if (!user) {
+		return (
+			<Navigate
+				to="/login"
+				replace
+			/>
+		);
+	}
+
+	return children;
+};
+
 const AppContent = () => {
 	const { user, checkAuth, checkingAuth } = useUserStore();
 
@@ -18,9 +39,13 @@ const AppContent = () => {
 		checkAuth();
 	}, [checkAuth]);
 
+	// Show loading until auth check is complete
+	if (checkingAuth) return <div>Loading...</div>;
+
 	return (
 		<Router>
 			<Routes>
+				{/* Public routes */}
 				<Route
 					path="/login"
 					element={
@@ -48,9 +73,14 @@ const AppContent = () => {
 					}
 				/>
 
+				{/* Protected layout */}
 				<Route
 					path="/"
-					element={<Layout />}
+					element={
+						<ProtectedRoute>
+							<Layout />
+						</ProtectedRoute>
+					}
 				>
 					<Route
 						index
@@ -83,6 +113,7 @@ const AppContent = () => {
 					/>
 				</Route>
 
+				{/* Catch-all route */}
 				<Route
 					path="*"
 					element={
