@@ -134,7 +134,9 @@ const AppContent = () => {
 };
 
 function App() {
-	return <AppContent />;
+	const { user } = useUserStore();
+
+	return <AppContent key={user?._id || "guest"} />;
 }
 
 export default App;

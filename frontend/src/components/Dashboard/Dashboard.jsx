@@ -4,7 +4,9 @@ import AdultDashboard from "./AdultDashboard";
 import HealthcareDashboard from "./HealthcareDashboard";
 
 const Dashboard = () => {
-	const { user } = useUserStore();
+	const { user, checkingAuth } = useUserStore();
+
+	if (checkingAuth) return <p>Loading...</p>; // or spinner
 
 	if (!user) return null;
 

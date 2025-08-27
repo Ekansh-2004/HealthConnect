@@ -68,6 +68,7 @@ const ConsultationsPage = () => {
 
 	const upcomingAppointments = getUpcomingAppointments();
 	const pastAppointments = getPastAppointments();
+	console.log(upcomingAppointments);
 
 	return (
 		<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -260,7 +261,7 @@ const ConsultationsPage = () => {
 									<div className="flex items-center space-x-3">
 										<User className="h-8 w-8 text-blue-600" />
 										<div>
-											<h3 className="font-semibold text-gray-900">{apt.healthProfessional.name || "Healthcare Professional"}</h3>
+											<h3 className="font-semibold text-gray-900">{apt.healthProfessional.name}</h3>
 											<p className="text-sm text-gray-600">{apt.specialty || "General Practice"}</p>
 										</div>
 									</div>
