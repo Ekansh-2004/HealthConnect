@@ -44,11 +44,11 @@ const AdultDashboard = () => {
         </Link>
 
         <Link
-          to="/chat"
+          to="/ask+"
           className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200"
         >
           <MessageCircle className="h-8 w-8 text-teal-600 mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Ask AI</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Ask Questions</h3>
           <p className="text-gray-600">Get instant answers to your questions</p>
         </Link>
       </div>

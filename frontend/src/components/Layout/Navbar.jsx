@@ -23,7 +23,7 @@ const Navbar = () => {
     const baseItems = [
       { key: 'home', path: '/dashboard', label: 'Home' },
       { key: 'learn', path: '/learn', label: 'Learn' },
-      { key: 'chat', path: '/chat', label: 'Chat' },
+      { key: 'Ask Question', path: '/ask', label: 'Ask' },
     ];
 
     if (user.role === 'adult') {
@@ -76,6 +76,7 @@ const Navbar = () => {
           {/* Right side items */}
           <div className="flex items-center space-x-4">
             {/* User Menu */}
+            
             <div className="flex items-center space-x-2">
               <User className="h-5 w-5 text-gray-600" />
               <span className="text-sm font-medium text-gray-700">{user?.name}</span>

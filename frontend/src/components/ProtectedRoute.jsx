@@ -12,10 +12,10 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   // Check if user role is allowed for this route
-  if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-    // Redirect to dashboard if user doesn't have permission
-    return <Navigate to="/dashboard" replace />;
-  }
+  // if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+  //   // Redirect to dashboard if user doesn't have permission
+  //   return <Navigate to="/dashboard" replace />;
+  // }
 
   return <>{children}</>;
 };

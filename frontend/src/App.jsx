@@ -11,6 +11,7 @@ import LearnPage from './components/Learn/LearnPage';
 import StoriesPage from './components/Stories/StoriesPage';
 import ConsultationsPage from './components/Consultations/ConsultationsPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import AskPage from './components/Ask/AskPage';
 
 const AppContent = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -42,6 +43,15 @@ const AppContent = () => {
               </ProtectedRoute>
             } 
           />
+          <Route 
+            path="ask" 
+            element={
+              <ProtectedRoute allowedRoles={['adult', 'healthcare_professional']}>
+                <AskPage />
+              </ProtectedRoute>
+            } 
+          />
+
           <Route 
             path="consultations" 
             element={
