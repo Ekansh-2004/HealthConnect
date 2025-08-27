@@ -1,5 +1,6 @@
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
+import AskPage from "./components/Ask/AskPage";
 import LoginForm from "./components/Auth/LoginForm";
 import SignupForm from "./components/Auth/SignupForm";
 import ConsultationsPage from "./components/Consultations/ConsultationsPage";
@@ -110,6 +111,10 @@ const AppContent = () => {
 					<Route
 						path="admin"
 						element={<Dashboard />}
+					/>
+					<Route
+						path="ask"
+						element={<AskPage />}
 					/>
 				</Route>
 

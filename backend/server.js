@@ -9,6 +9,7 @@ import connectDB from "./config/db.js";
 // Import routes (must use .js extension in ESM)
 import appointmentRoutes from "./routes/appointments.js";
 import authRoutes from "./routes/auth.js";
+import questionRoutes from "./routes/question.js";
 import storyRoutes from "./routes/stories.js";
 
 dotenv.config();
@@ -41,6 +42,7 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/auth", authRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/stories", storyRoutes);
+app.use("/api/questions", questionRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {

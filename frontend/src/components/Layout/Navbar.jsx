@@ -20,14 +20,14 @@ const Navbar = () => {
 		const baseItems = [
 			{ key: "home", path: "/dashboard", label: "Home" },
 			{ key: "learn", path: "/learn", label: "Learn" },
-			{ key: "chat", path: "/chat", label: "Chat" },
+			{ key: "ask", path: "/ask", label: "Ask" },
 		];
 
 		if (user.userType === "adult") {
 			baseItems.push({ key: "stories", path: "/stories", label: "Stories" }, { key: "consultations", path: "/consultations", label: "Consultations" });
 		}
 
-		if (user.userType === "healthcare_professional") {
+		if (user.userType === "health_prof") {
 			baseItems.push({ key: "admin", path: "/admin", label: "Admin" });
 		}
 
