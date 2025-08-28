@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-// import { useTranslation } from 'react-i18next';
 import { BookOpen, Award, Volume2, Eye, RotateCcw } from 'lucide-react';
 import QuizComponent from './QuizComponent';
 import MythFactCards from './MythFactCards';
 
 const LearnPage = () => {
-  // const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('articles');
   const [speakingText, setSpeakingText] = useState(null);
 
-  const articles = [
+  // Store both original + translated content
+  const [articles, setArticles] = useState([
     {
       id: '1',
       title: 'Understanding Puberty: A Complete Guide',
@@ -20,7 +19,8 @@ Physical changes include growth spurts, development of secondary sexual characte
 
 Emotional changes are also common during puberty. You might experience mood swings, increased interest in relationships, and questions about your identity. These feelings are completely normal and part of growing up.`,
       category: 'Adolescent Health',
-      readTime: '5 min read'
+      readTime: '5 min read',
+      originalContent: null,
     },
     {
       id: '2',
@@ -32,7 +32,8 @@ Condoms not only prevent most STIs but also prevent unintended pregnancy. It's i
 
 Regular testing is also an important part of sexual health. Many STIs can be asymptomatic, meaning you might not know you have one without testing. Getting tested regularly and discussing your sexual health with healthcare providers helps ensure early detection and treatment if needed.`,
       category: 'Sexual Health',
-      readTime: '7 min read'
+      readTime: '7 min read',
+      originalContent: null,
     },
     {
       id: '3',
@@ -49,15 +50,76 @@ Consent must be:
 
 Communication is key in any relationship. Partners should feel comfortable discussing their boundaries, desires, and concerns openly and honestly. Remember that consent can be withdrawn at any time, and respecting that decision is crucial.`,
       category: 'Relationships',
-      readTime: '6 min read'
-    }
-  ];
+      readTime: '6 min read',
+      originalContent: null,
+    },
+  ]);
 
+  // --- AI Translation using Gemini API ---
+  const translateWithGemini = async (text) => {
+    const apiKey = "AIzaSyAeRhjpSmZgw3UttKNd3vwowbEwNA8VShI"; // ⚠️ Replace with your key (keep only in frontend for testing!)
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+    const prompt = `
+      Translate the following text from English to Hindi.
+      Keep the meaning accurate, do not add extra explanations.
+      Text: """${text}"""
+    `;
+
+    const payload = {
+      contents: [{ parts: [{ text: prompt }] }],
+    };
+
+    try {
+      const res = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      const translated = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+      return translated || text;
+    } catch (err) {
+      console.error("Gemini Translation Error:", err);
+      alert("Translation failed. Please try again.");
+      return text;
+    }
+  };
+
+  // Function to translate using Gemini AI
+  const handleTranslate = async (id, text) => {
+    const translatedText = await translateWithGemini(text);
+
+    setArticles((prev) =>
+      prev.map((article) =>
+        article.id === id
+          ? {
+              ...article,
+              originalContent: article.originalContent || article.content,
+              content: translatedText,
+            }
+          : article
+      )
+    );
+  };
+
+  // Function to restore original English content
+  const handleBackToEnglish = (id) => {
+    setArticles((prev) =>
+      prev.map((article) =>
+        article.id === id && article.originalContent
+          ? { ...article, content: article.originalContent, originalContent: null }
+          : article
+      )
+    );
+  };
+
+  // Speak aloud
   const speakText = (text) => {
     if ('speechSynthesis' in window) {
-      // Cancel any ongoing speech
       window.speechSynthesis.cancel();
-      
+
       if (speakingText === text) {
         setSpeakingText(null);
         return;
@@ -67,7 +129,7 @@ Communication is key in any relationship. Partners should feel comfortable discu
       utterance.rate = 0.8;
       utterance.onstart = () => setSpeakingText(text);
       utterance.onend = () => setSpeakingText(null);
-      
+
       window.speechSynthesis.speak(utterance);
     }
   };
@@ -81,7 +143,7 @@ Communication is key in any relationship. Partners should feel comfortable discu
         </p>
       </div>
 
-      {/* Tab Navigation */}
+      {/* Tabs */}
       <div className="mb-8">
         <nav className="flex space-x-8">
           <button
@@ -120,7 +182,7 @@ Communication is key in any relationship. Partners should feel comfortable discu
         </nav>
       </div>
 
-      {/* Content Based on Active Tab */}
+      {/* Articles */}
       {activeTab === 'articles' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -133,15 +195,16 @@ Communication is key in any relationship. Partners should feel comfortable discu
                     </span>
                     <span className="text-sm text-gray-500">{article.readTime}</span>
                   </div>
-                  
+
                   <h2 className="text-xl font-bold text-gray-900 mb-3">{article.title}</h2>
                   <p className="text-gray-600 mb-4">{article.excerpt}</p>
-                  
+
                   <div className="prose max-w-none">
                     <div className="whitespace-pre-line text-gray-700">{article.content}</div>
                   </div>
-                  
-                  <div className="mt-6 flex items-center space-x-4">
+
+                  <div className="mt-6 flex flex-wrap items-center space-x-4">
+                    {/* Read Aloud */}
                     <button
                       onClick={() => speakText(article.content)}
                       className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -162,12 +225,30 @@ Communication is key in any relationship. Partners should feel comfortable discu
                         </>
                       )}
                     </button>
+
+                    {/* Translate */}
+                    {!article.originalContent ? (
+                      <button
+                        onClick={() => handleTranslate(article.id, article.content)}
+                        className="px-4 py-2 rounded-md text-sm font-medium bg-green-100 text-green-700 hover:bg-green-200"
+                      >
+                        Translate to Hindi
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleBackToEnglish(article.id)}
+                        className="px-4 py-2 rounded-md text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      >
+                        Back to English
+                      </button>
+                    )}
                   </div>
                 </article>
               ))}
             </div>
           </div>
 
+          {/* Sidebar */}
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
