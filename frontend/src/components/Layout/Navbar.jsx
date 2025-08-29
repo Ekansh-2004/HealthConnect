@@ -29,16 +29,11 @@ const Navbar = () => {
       );
     }
 
-    // if (user.userType === "health_prof") {
-    //   baseItems.push({ key: "nav.admin", path: "/admin" });
-    // }
-
     return baseItems;
   }, [user]);
 
   if (!user) return null;
 
-  // Handle language switch
   const handleLanguageChange = (e) => {
     i18n.changeLanguage(e.target.value);
   };
@@ -46,16 +41,15 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        {/* Flex row that stays in one line */}
+        <div className="flex items-center justify-between h-16 flex-nowrap">
           {/* Logo */}
-          <div className="flex items-center">
-            <Link to="/dashboard" className="flex items-center space-x-2">
-              <Heart className="h-8 w-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">
-                HealthConnect
-              </span>
-            </Link>
-          </div>
+          <Link to="/dashboard" className="flex items-center space-x-2">
+            <Heart className="h-8 w-8 text-blue-600" />
+            <span className="text-xl font-bold text-gray-900">
+              HealthConnect
+            </span>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -75,7 +69,7 @@ const Navbar = () => {
           </div>
 
           {/* Right side items */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 flex-shrink-0">
             {/* Language Switcher */}
             <select
               onChange={handleLanguageChange}
@@ -86,8 +80,8 @@ const Navbar = () => {
               <option value="hi">हिंदी</option>
             </select>
 
-            {/* User Menu */}
-            <div className="flex items-center space-x-2">
+            {/* User Info (desktop only) */}
+            <div className="hidden md:flex items-center space-x-2">
               <User className="h-5 w-5 text-gray-600" />
               <span className="text-sm font-medium text-gray-700">
                 {user?.name}
@@ -101,7 +95,7 @@ const Navbar = () => {
               </button>
             </div>
 
-            {/* Mobile menu button */}
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
@@ -114,8 +108,8 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden border-t border-gray-200">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+        <div className="md:hidden border-t border-gray-200 bg-white shadow-md">
+          <div className="px-4 pt-3 pb-4 space-y-3">
             {navItems.map((item) => (
               <Link
                 key={item.key}
@@ -130,6 +124,33 @@ const Navbar = () => {
                 {t(item.key)}
               </Link>
             ))}
+
+            {/* Language Switcher (mobile) */}
+            <select
+              onChange={handleLanguageChange}
+              value={i18n.language}
+              className="w-full border rounded-md px-2 py-2 text-sm text-gray-700"
+            >
+              <option value="en">English</option>
+              <option value="hi">हिंदी</option>
+            </select>
+
+            {/* User Info + Logout (mobile) */}
+            <div className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-md">
+              <div className="flex items-center space-x-2">
+                <User className="h-5 w-5 text-gray-600" />
+                <span className="text-sm font-medium text-gray-700">
+                  {user?.name}
+                </span>
+              </div>
+              <button
+                onClick={logout}
+                className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                title={t("nav.logout")}
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
       )}
