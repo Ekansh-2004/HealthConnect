@@ -133,7 +133,7 @@ const ConsultationsPage = () => {
 										>
 											<div className="flex items-center space-x-3">
 												<img
-													src={doctor.image}
+													src="/images/avatar.jpg"
 													alt={doctor.name}
 													className="w-12 h-12 rounded-full object-cover"
 												/>
