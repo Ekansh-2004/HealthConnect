@@ -1,4 +1,4 @@
-import { PlusCircle, Reply, Search, Trash2, ShieldAlert } from "lucide-react";
+import { PlusCircle, Reply, Search, ShieldAlert, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useQuestionStore } from "../../store/useQuestionStore.jsx";
 import { useUserStore } from "../../store/useUserStore.jsx";
@@ -6,7 +6,7 @@ import { useUserStore } from "../../store/useUserStore.jsx";
 // --- New Validation Function using Gemini API ---
 const validateQuestionWithLLM = async (question) => {
 	// IMPORTANT: Replace with your actual Gemini API key in production (from backend, not client!)
-	const apiKey = "AIzaSyCjuxtAyuClWFKY7JqQUl6jREe33-das0M"; 
+	const apiKey = "AIzaSyCjuxtAyuClWFKY7JqQUl6jREe33-das0M";
 	const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
 	const prompt = `
@@ -51,15 +51,7 @@ const AskPage = () => {
 	const { user } = useUserStore();
 	const role = user?.userType;
 
-	const {
-		questions,
-		fetchQuestions,
-		addQuestion,
-		answerQuestion,
-		deleteQuestion,
-		loading,
-		error,
-	} = useQuestionStore();
+	const { questions, fetchQuestions, addQuestion, answerQuestion, deleteQuestion, loading, error } = useQuestionStore();
 
 	const [newQuestion, setNewQuestion] = useState("");
 	const [validationError, setValidationError] = useState("");
@@ -88,9 +80,7 @@ const AskPage = () => {
 				addQuestion(newQuestion);
 				setNewQuestion("");
 			} else {
-				setValidationError(
-					"This question is not appropriate or not health-related. Please try again."
-				);
+				setValidationError("This question is not appropriate or not health-related. Please try again.");
 			}
 		} catch (e) {
 			setValidationError("Could not verify the question. Please try again later.");
@@ -113,17 +103,11 @@ const AskPage = () => {
 		}
 	};
 
-	const filteredQuestions = questions.filter((q) =>
-		q.question.toLowerCase().includes(searchTerm.toLowerCase())
-	);
+	const filteredQuestions = questions.filter((q) => q.question.toLowerCase().includes(searchTerm.toLowerCase()));
 
 	return (
 		<div className="max-w-4xl mx-auto p-6">
 			<h1 className="text-2xl font-bold text-blue-600 mb-2">Ask & Answer</h1>
-
-			<p className="text-gray-500 mb-6">
-				<strong>Current role:</strong> {role || "Not logged in"}
-			</p>
 
 			{/* Search box */}
 			<div className="relative mb-6">
@@ -164,9 +148,7 @@ const AskPage = () => {
 						className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed"
 					>
 						{isVerifying ? (
-							<>
-								Verifying...
-							</>
+							<>Verifying...</>
 						) : (
 							<>
 								<PlusCircle className="h-4 w-4 mr-2" />
@@ -182,12 +164,13 @@ const AskPage = () => {
 			{error && <p className="text-red-500">{error}</p>}
 
 			<div className="space-y-4">
-				{filteredQuestions.length === 0 && !loading && (
-					<p className="text-gray-400 italic">No matching questions found.</p>
-				)}
+				{filteredQuestions.length === 0 && !loading && <p className="text-gray-400 italic">No matching questions found.</p>}
 
 				{filteredQuestions.map((q) => (
-					<div key={q._id} className="p-4 border rounded-lg shadow-sm bg-white">
+					<div
+						key={q._id}
+						className="p-4 border rounded-lg shadow-sm bg-white"
+					>
 						<div className="flex justify-between items-start">
 							<p className="font-medium text-blue-700">{q.question}</p>
 							{role === "admin" && (
@@ -200,11 +183,7 @@ const AskPage = () => {
 							)}
 						</div>
 
-						{q.answer ? (
-							<p className="mt-2 text-gray-700">{q.answer}</p>
-						) : (
-							<p className="mt-2 text-gray-400 italic">No answer yet.</p>
-						)}
+						{q.answer ? <p className="mt-2 text-gray-700">{q.answer}</p> : <p className="mt-2 text-gray-400 italic">No answer yet.</p>}
 
 						{/* Reply box for health professionals */}
 						{role === "health_prof" && !q.answer && (
