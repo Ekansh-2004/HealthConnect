@@ -6,7 +6,7 @@ import { useUserStore } from "../../store/useUserStore.jsx";
 // --- New Validation Function using Gemini API ---
 const validateQuestionWithLLM = async (question) => {
 	// IMPORTANT: Replace with your actual Gemini API key in production (from backend, not client!)
-	const apiKey = "AIzaSyCjuxtAyuClWFKY7JqQUl6jREe33-das0M";
+	const apiKey = "AIzaSyBkAvcrmXcBocHuF3-ShkHKnq4uexJyQBQ";
 	const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
 	const prompt = `

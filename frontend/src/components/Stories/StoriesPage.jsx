@@ -37,7 +37,7 @@ const StoriesPage = () => {
 	}, [clearError]);
 
 	const translateWithGemini = async (text) => {
-		const apiKey = "AIzaSyAeRhjpSmZgw3UttKNd3vwowbEwNA8VShI";
+		const apiKey = "AIzaSyCidAxrUC17rqT94IwaQ0mlSQWCEqE5SEo";
 		const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
 		const prompt = `
